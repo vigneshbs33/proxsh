@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProxSh</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script>window.PROXSH_BOOT = "__PROXSH_BOOT__";</script>
+</head>
+<body class="desk">
+  <header class="bar">
+    <span class="logo">ProxSh</span>
+    <span id="deviceName" class="muted"></span>
+    <span id="status" class="pill wait">Starting…</span>
+  </header>
+
+  <main>
+    <aside class="card pair">
+      <h2 style="margin-top:0">Connect your phone</h2>
+      <img id="qr" alt="QR code to connect your phone" hidden>
+      <p id="qrHelp" class="muted">Open your phone camera and scan this. Phone and laptop must be on the same Wi-Fi or hotspot.</p>
+      <p id="qrUrl" class="url"></p>
+      <details id="otherAddresses" hidden>
+        <summary>Phone can't open it?</summary>
+        <p class="muted">Try typing one of these on your phone instead:</p>
+        <ul id="addressList" class="url"></ul>
+        <p class="muted">If none work, allow Node.js through Windows Firewall on private networks, or join your phone's hotspot.</p>
+      </details>
+    </aside>
+
+    <section>
+      <div id="drop" class="drop">
+        <p class="big">Drop files here to send to your phone</p>
+        <p class="muted">or press Ctrl+V to send whatever you copied</p>
+        <div class="controls">
+          <label class="button" for="files">Choose files</label>
+          <input id="files" type="file" multiple hidden>
+        </div>
+        <form id="textForm" class="text-form" style="margin-top:14px">
+          <textarea id="text" rows="1" placeholder="Type text or a link for your phone"></textarea>
+          <button class="primary" type="submit">Send</button>
+        </form>
+      </div>
+
+      <div class="columns">
+        <div>
+          <h2>From phone</h2>
+          <ul id="received" class="list"></ul>
+          <p id="receivedEmpty" class="empty">Nothing yet. Files are saved to <span id="receiveDir"></span></p>
+        </div>
+        <div>
+          <h2>Sent to phone</h2>
+          <ul id="sent" class="list"></ul>
+          <p id="sentEmpty" class="empty">Nothing sent yet.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="error" class="error" role="alert" hidden></div>
+
+  <script src="/static/common.js"></script>
+  <script src="/static/desk.js"></script>
+</body>
+</html>

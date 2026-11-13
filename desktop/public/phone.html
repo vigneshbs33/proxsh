@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProxSh</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="phone">
+  <header class="bar">
+    <span class="logo">ProxSh</span>
+    <span id="status" class="pill wait">Connecting…</span>
+  </header>
+
+  <main>
+    <p id="target" class="muted">Looking for your laptop…</p>
+
+    <section class="card">
+      <label class="pick" for="files">
+        <span class="pick-icon" aria-hidden="true">+</span>
+        <span>Pick photos or files to send</span>
+        <span class="muted">They save to Downloads/ProxSh on the laptop</span>
+      </label>
+      <input id="files" type="file" multiple hidden>
+
+      <form id="textForm" class="text-form">
+        <textarea id="text" rows="3" placeholder="Type or paste text, a link, an OTP…"></textarea>
+        <button class="primary" type="submit">Send text</button>
+      </form>
+    </section>
+
+    <section id="outgoingSection" hidden>
+      <h2>Sent to laptop</h2>
+      <ul id="outgoing" class="list"></ul>
+    </section>
+
+    <section>
+      <h2>From laptop</h2>
+      <ul id="incoming" class="list"></ul>
+      <p id="incomingEmpty" class="empty">Drop a file on the laptop window and it shows up here.</p>
+    </section>
+  </main>
+
+  <div id="error" class="error" role="alert" hidden></div>
+
+  <script src="/static/common.js"></script>
+  <script src="/static/phone.js"></script>
+</body>
+</html>

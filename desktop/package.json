@@ -1,0 +1,20 @@
+{
+  "name": "proxsh-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ProxSh laptop app: send files and text between your phone and laptop over Wi-Fi, no account needed.",
+  "main": "src/index.js",
+  "bin": {
+    "proxsh": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
+}

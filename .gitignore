@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# ProxSh runtime data (pairing key, outbox) — never commit the pairing key
+desktop/data/
+
+# Logs and test output
+*.log
+npm-debug.log*
+coverage/
+
+# Build output
+dist/
+build/
+out/
+
+# Gradle / Kotlin / Android
+.gradle/
+.kotlin/
+local.properties
+*.iml
+.idea/
+
+# Keys and certificates: never commit a device identity or signing key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.env
