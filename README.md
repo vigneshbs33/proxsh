@@ -25,11 +25,11 @@ SEPM course project, work in progress. See [Status](#status) for exactly what is
 | Piece | State |
 | --- | --- |
 | `core`: identity, trust, discovery, encrypted resumable transfer, link choice | Built. 22 automated tests pass, including discovery over this machine's real network. |
-| `laptop`: Windows app (Compose Desktop, light theme) | Built and rendered offscreen. Not yet tried by hand on a desktop. |
+| `laptop`: Windows app (Compose Desktop, light theme) | Built. Starts and listens (checked through Gradle), and all screens render offscreen with two real nodes. Not yet used by hand. |
 | `android`: phone app | Not started. Needs the Android SDK. |
 | Hotspot joining, Bluetooth discovery, internet route | Link choice is built and tested with simulated links. Real hotspot, Bluetooth and internet links are not built. |
 | Switching links in the middle of a transfer | Not built. It re-measures and switches after a dropped connection. |
-| Windows installer | Configured, not yet built. |
+| Windows installer | Configured. The packaged `ProxSh.exe` builds (about 130 MB with its own Java), but it is unsigned and Windows Application Control blocked it on the development laptop. Shipping to people needs a code-signing certificate or Microsoft Store packaging. |
 
 Nothing has been tested with a real phone.
 
