@@ -52,7 +52,10 @@ fun main(args: Array<String>) = runBlocking {
     }
     var clock = 0L
     fun shot(name: String) {
-        // Two frames well apart so entrance animations have finished.
+        // Entrance animations start on the frame after a thing first appears, so draw one frame to
+        // compose it, one to start its animation, and a last one well after it has finished.
+        scene.render(clock)
+        clock += 16_000_000L
         scene.render(clock)
         clock += 3_000_000_000L
         val image = scene.render(clock)

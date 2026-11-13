@@ -293,7 +293,11 @@ private fun ActivityList(model: AppModel) {
         BasicText("Files you send and receive show up here.", style = Type.soft)
         return
     }
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 20.dp),
+        modifier = Modifier.fillMaxSize(),
+    ) {
         items(live, key = { "live-" + it.id }) { LiveRow(it) }
         items(done, key = { it.id }) { ActivityRow(it, model) }
     }

@@ -1,3 +1,10 @@
 * text=auto
 *.png binary
 *.jpg binary
+*.jar binary
+
+# Scripts must keep their line endings or they break on the other platform.
+gradlew text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
