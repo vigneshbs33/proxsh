@@ -26,7 +26,7 @@ SEPM course project, work in progress. See [Status](#status) for exactly what is
 | --- | --- |
 | `core`: identity, trust, discovery, encrypted resumable transfer, link choice | Built. 22 automated tests pass, including discovery over this machine's real network. |
 | `laptop`: Windows app (Compose Desktop, light theme) | Built. Starts and listens (checked through Gradle), and all screens render offscreen with two real nodes. Not yet used by hand. |
-| `android`: phone app | Not started. Needs the Android SDK. |
+| `android`: phone app (Kotlin, Android 10+) | Built: Share-menu entry, background service, Nearby list, accept dialog, notifications with Accept / Decline / Share, files saved to Downloads/ProxSh. A 31 MB debug APK builds and its manifest checks out, but it has **never been run on a phone or emulator**. |
 | Hotspot joining, Bluetooth discovery, internet route | Link choice is built and tested with simulated links. Real hotspot, Bluetooth and internet links are not built. |
 | Switching links in the middle of a transfer | Not built. It re-measures and switches after a dropped connection. |
 | Windows installer | Configured. The packaged `ProxSh.exe` builds (about 130 MB with its own Java), but it is unsigned and Windows Application Control blocked it on the development laptop. Shipping to people needs a code-signing certificate or Microsoft Store packaging. |
@@ -38,15 +38,17 @@ Nothing has been tested with a real phone.
 ```
 core/        Kotlin library shared by both apps
 laptop/      Windows app
+android/     Phone app
 desktop/     First prototype (Node.js, QR pairing). Kept for reference.
 docs/        Design notes, competitor study, HTTP API of the prototype
 scripts/     Build environment for Windows
-mobile/, signaling/   Placeholders for later work
+signaling/   Placeholder for the internet-mode helper (later)
+mobile/      Old placeholder, replaced by android/
 ```
 
 ## Build and run (Windows)
 
-Needs JDK 21 and Gradle (the wrapper downloads Gradle for you). `scripts/env.ps1` points the tools
+Needs JDK 21 and Gradle (the wrapper downloads Gradle for you). The phone app also needs the Android SDK (platform 37, build-tools 36.1) with its licence accepted; set `ANDROID_HOME`. `scripts/env.ps1` points the tools
 and caches at one folder so nothing lands on the C drive:
 
 ```powershell
@@ -55,6 +57,7 @@ gradle :core:test            # run the core tests
 gradle :laptop:run           # start the laptop app
 gradle :laptop:preview       # render the window offscreen to laptop/build/previews
 gradle :laptop:packageExe    # build the Windows installer
+gradle :android:assembleDebug # build the phone app (android/build/outputs/apk/debug)
 ```
 
 ## Documents

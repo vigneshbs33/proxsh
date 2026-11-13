@@ -17,6 +17,6 @@ rootProject.name = "proxsh"
 
 // core    shared Kotlin library: identity, trust, discovery, transfer, link choice
 // laptop  the Windows app (Compose Desktop)
-include(":core", ":laptop")
+// android the phone app
+include(":core", ":laptop", ":android")
 
-// ":android" is added once the Android SDK is installed. See android/README.md.
