@@ -1,0 +1,129 @@
+/* The motion kit's CSS, restyled for ProxSh. Structure comes from the skill; the look is ours. */
+
+html,
+body {
+  background: var(--page);
+}
+body {
+  overflow-x: clip; /* clip, not hidden: hidden breaks position: sticky */
+}
+
+/* smooth scroll (Lenis) and locks */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+html.is-locked,
+html.is-locked body {
+  overflow: hidden;
+}
+
+/* intro gate */
+html[data-intro='none'] .intro,
+html[data-intro='done'] .intro,
+html.motion-fallback .intro {
+  display: none;
+}
+html:not([data-intro='done']):not([data-intro='none']) .scroll-cue {
+  opacity: 0;
+}
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--page);
+  display: grid;
+  place-items: center;
+  --hole: 0vmax;
+  mask-image: radial-gradient(circle at 50% 46%, transparent var(--hole), #000 calc(var(--hole) + 1px));
+  -webkit-mask-image: radial-gradient(circle at 50% 46%, transparent var(--hole), #000 calc(var(--hole) + 1px));
+}
+
+/* reveals (CSS variant): a small rise with a touch of blur */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease),
+    filter 0.9s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+html.motion-fallback [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+.split-line {
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+/* pinned chapters (CSS sticky, no pin spacer) */
+.ch {
+  position: relative;
+}
+.ch__back,
+.ch__front {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+}
+.ch__back {
+  z-index: 1;
+}
+.ch__front {
+  z-index: 3;
+  margin-top: -100svh;
+  pointer-events: none;
+}
+.ch__front :is(a, button, input, textarea, select, label, form, summary, details) {
+  pointer-events: auto;
+}
+.ch--flow {
+  position: relative;
+  z-index: 3;
+}
+
+/* reduced motion, print */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media print {
+  .intro,
+  .rail,
+  .nav,
+  .scroll-cue {
+    display: none !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

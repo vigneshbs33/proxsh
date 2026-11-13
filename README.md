@@ -27,6 +27,7 @@ SEPM course project, work in progress. See [Status](#status) for exactly what is
 | `core`: identity, trust, discovery, encrypted resumable transfer, link choice | Built. 22 automated tests pass, including discovery over this machine's real network. |
 | `laptop`: Windows app (Compose Desktop, light theme) | Built. Starts and listens (checked through Gradle), and all screens render offscreen with two real nodes. Not yet used by hand. |
 | `android`: phone app (Kotlin, Android 10+) | Built: Share-menu entry, background service, Nearby list, accept dialog, notifications with Accept / Decline / Share, files saved to Downloads/ProxSh. A 31 MB debug APK builds and its manifest checks out, but it has **never been run on a phone or emulator**. |
+| `website`: the home page with the downloads (Next.js, deploys on Vercel) | Built and checked at desktop and phone sizes. The download buttons need a GitHub release to exist first; see [website/README.md](website/README.md). |
 | Hotspot joining, Bluetooth discovery, internet route | Link choice is built and tested with simulated links. Real hotspot, Bluetooth and internet links are not built. |
 | Switching links in the middle of a transfer | Not built. It re-measures and switches after a dropped connection. |
 | Windows installer | Configured. The packaged `ProxSh.exe` builds (about 130 MB with its own Java), but it is unsigned and Windows Application Control blocked it on the development laptop. Shipping to people needs a code-signing certificate or Microsoft Store packaging. |
@@ -39,6 +40,7 @@ Nothing has been tested with a real phone.
 core/        Kotlin library shared by both apps
 laptop/      Windows app
 android/     Phone app
+website/     Home page and downloads
 desktop/     First prototype (Node.js, QR pairing). Kept for reference.
 docs/        Design notes, competitor study, HTTP API of the prototype
 scripts/     Build environment for Windows

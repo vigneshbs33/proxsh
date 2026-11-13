@@ -32,3 +32,10 @@ local.properties
 Thumbs.db
 .vscode/
 .env
+
+# Website
+.next/
+website/.vercel/
+next-env.d.ts
+*.tsbuildinfo
+dist/
