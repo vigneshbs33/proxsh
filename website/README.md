@@ -33,10 +33,10 @@ The buttons point at files attached to a GitHub release. They return a 404 until
 
 1. Build the files:
    - `gradle :android:assembleDebug`, then copy `android/build/outputs/apk/debug/android-debug.apk` to `ProxSh-0.1.0-android.apk`
-   - `gradle :laptop:createDistributable`, then zip the `ProxSh` folder in `laptop/build/compose/binaries/main/app` as `ProxSh-0.1.0-windows-x64.zip`
+   - `gradle :laptop:packageExe` (needs WiX 3, see `scripts/env.ps1`), then copy `laptop/build/compose/binaries/main/exe/ProxSh-0.1.0.exe` to `ProxSh-0.1.0-windows-x64.exe`
 2. Create the release and upload both files under exactly these names:
    ```bash
-   gh release create v0.1.0 ProxSh-0.1.0-android.apk ProxSh-0.1.0-windows-x64.zip --title "ProxSh 0.1.0" --notes "First public build."
+   gh release create v0.1.0 ProxSh-0.1.0-android.apk ProxSh-0.1.0-windows-x64.exe --title "ProxSh 0.1.0" --notes "First public build."
    ```
 3. Put each file's size and fingerprint into `src/data/site.ts` (`Get-FileHash <file> -Algorithm SHA256`),
    push, and Vercel redeploys.
@@ -55,7 +55,7 @@ src/styles/              tokens.css (colours), kit.css (motion), site.css, scene
 
 ## Notes
 
-- The builds are early. The Android file is signed with a debug key and the Windows build is not
+- The builds are early. The Android file is signed with a debug key and the Windows installer is not
   signed, so Android and Windows will both warn on first install. The page says so.
 - Fonts (Fraunces, Instrument Sans, DM Mono) are downloaded and self-hosted by Next at build time.
 - Respects reduced-motion: no intro, no smooth scroll, final states shown.

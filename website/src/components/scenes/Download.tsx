@@ -32,10 +32,14 @@ const TARGETS: Target[] = [
     key: 'windows',
     glyph: 'laptop',
     title: 'ProxSh for Windows',
-    button: 'Download the zip',
+    button: 'Download the installer',
     ...release.windows,
-    steps: ['Unzip the folder anywhere you like.', 'Run ProxSh.exe. If Windows Firewall asks, allow it on private networks.', 'Leave it running in the tray so your phone can find it.'],
-    note: 'Windows may say the publisher is unknown. ProxSh is a student project and is not signed yet.',
+    steps: [
+      'Run the installer you downloaded.',
+      'Pick a folder if you like, then finish. ProxSh appears in your Start menu.',
+      'Open ProxSh and leave it running so your phone can find it. If Windows Firewall asks, allow it on private networks.',
+    ],
+    note: 'Windows may say the publisher is unknown. Choose More info, then Run anyway. ProxSh is a student project and the installer is not signed yet.',
   },
 ];
 

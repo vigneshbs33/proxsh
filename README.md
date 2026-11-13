@@ -30,7 +30,7 @@ SEPM course project, work in progress. See [Status](#status) for exactly what is
 | `website`: the home page with the downloads (Next.js, deploys on Vercel) | Built and checked at desktop and phone sizes. The download buttons need a GitHub release to exist first; see [website/README.md](website/README.md). |
 | Hotspot joining, Bluetooth discovery, internet route | Link choice is built and tested with simulated links. Real hotspot, Bluetooth and internet links are not built. |
 | Switching links in the middle of a transfer | Not built. It re-measures and switches after a dropped connection. |
-| Windows installer | Configured. The packaged `ProxSh.exe` builds (about 130 MB with its own Java), but it is unsigned and Windows Application Control blocked it on the development laptop. Shipping to people needs a code-signing certificate or Microsoft Store packaging. |
+| Windows installer | Built: `ProxSh-0.1.0.exe` (64 MB, with its own Java) from `gradle :laptop:packageExe`. Its contents were inspected (Start menu and Desktop shortcuts, folder chooser, per-user install, replaces older versions) but it has not been run, because Windows Application Control blocks unsigned programs on the development laptop. It is unsigned, so other PCs will show an "unknown publisher" warning too; signing needs a code-signing certificate or Microsoft Store packaging. |
 
 Nothing has been tested with a real phone.
 
@@ -58,7 +58,7 @@ and caches at one folder so nothing lands on the C drive:
 gradle :core:test            # run the core tests
 gradle :laptop:run           # start the laptop app
 gradle :laptop:preview       # render the window offscreen to laptop/build/previews
-gradle :laptop:packageExe    # build the Windows installer
+gradle :laptop:packageExe    # build the Windows installer (needs WiX 3 on the PATH, see scripts/env.ps1)
 gradle :android:assembleDebug # build the phone app (android/build/outputs/apk/debug)
 ```
 

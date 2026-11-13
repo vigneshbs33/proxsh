@@ -16,7 +16,8 @@ $env:TEMP             = Join-Path $cache "tmp"
 $env:TMP              = $env:TEMP
 New-Item -ItemType Directory -Force $env:TEMP | Out-Null
 
-$env:Path = (Join-Path $tools "gradle-9.9.1\bin") + ";" + (Join-Path $env:JAVA_HOME "bin") + ";" + $env:Path
+# WiX 3 (candle.exe and light.exe) is what jpackage needs to build the Windows installer
+$env:Path = (Join-Path $tools "gradle-9.9.1\bin") + ";" + (Join-Path $env:JAVA_HOME "bin") + ";" + (Join-Path $tools "wix314") + ";" + $env:Path
 
 Write-Host "Java:   $env:JAVA_HOME"
 Write-Host "Gradle: $env:GRADLE_USER_HOME"

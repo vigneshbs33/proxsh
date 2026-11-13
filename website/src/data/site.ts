@@ -3,7 +3,7 @@
  * the animation code.
  *
  * To publish a new version:
- *   1. Build the files (gradle :android:assembleDebug, :laptop:createDistributable, then zip the folder).
+ *   1. Build the files (gradle :android:assembleDebug and :laptop:packageExe).
  *   2. Create a GitHub release with the tag below and upload both files under exactly these names.
  *   3. Update version, tag, bytes and sha256 here (Get-FileHash <file> -Algorithm SHA256).
  */
@@ -25,10 +25,10 @@ export const release = {
     needs: 'Android 10 or newer',
   },
   windows: {
-    file: `ProxSh-${version}-windows-x64.zip`,
-    url: `${base}/ProxSh-${version}-windows-x64.zip`,
-    bytes: 65_592_170,
-    sha256: '9ae576e262e86a7da9580ed19ea0621e171c153c1c1926d31e14609b37baa14e',
+    file: `ProxSh-${version}-windows-x64.exe`,
+    url: `${base}/ProxSh-${version}-windows-x64.exe`,
+    bytes: 67_681_792,
+    sha256: '08e6bdf8c7f8205c07df1240b37bdb2282b8de63194e3f052aed88fcefcff8ca',
     needs: 'Windows 10 or 11, 64-bit',
   },
 } as const;
