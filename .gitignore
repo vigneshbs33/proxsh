@@ -39,3 +39,4 @@ website/.vercel/
 next-env.d.ts
 *.tsbuildinfo
 dist/
+gradle/gradle-daemon-jvm.properties

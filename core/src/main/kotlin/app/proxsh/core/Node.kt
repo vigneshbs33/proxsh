@@ -197,49 +197,170 @@ class ProxshNode(private val config: NodeConfig, private val scope: CoroutineSco
         return SendResult(false, lastError, link)
     }
 
-    private suspend fun sendOnce(peer: Peer, candidate: LinkCandidate, items: List<OutgoingItem>, transferId: String): SendResult {
+    private suspend fun sendOnce(
+        peer: Peer,
+        candidate: LinkCandidate,
+        items: List<OutgoingItem>,
+        transferId: String
+    ): SendResult {
+
         val sock = tls.connect(candidate.host, candidate.port)
         openSockets.add(sock)
-        val onCancel = currentCoroutineContext().job.invokeOnCompletion { runCatching { sock.close() } }
+
+        val onCancel = currentCoroutineContext().job.invokeOnCompletion {
+            runCatching {
+                sock.close()
+            }
+        }
+
         try {
+            // Get the actual fingerprint presented by the connected device
             val fingerprint = TlsFactory.peerFingerprint(sock)
-            if (fingerprint != peer.id) throw SecurityException("That is not the device it claimed to be")
-            val io = FrameIO(sock.getInputStream(), sock.getOutputStream())
-            io.writeControl(Hello(PROTOCOL_VERSION, config.deviceName, config.deviceKind))
-            val hello = io.readControl() as? Hello ?: throw ProtocolException("Expected hello")
+
+            // ---------------------------------------------------------
+            // PROXSH IDENTITY DIAGNOSTICS
+            // ---------------------------------------------------------
+
+            println("\n========== PROXSH IDENTITY DEBUG ==========")
+
+            println("Selected device:       ${peer.name}")
+            println("Device ID:             ${peer.id}")
+
+            println("Expected fingerprint:  ${peer.id.take(16)}")
+            println("Actual fingerprint:    ${fingerprint.take(16)}")
+
+            println("Laptop fingerprint:    ${identity.fingerprint.take(16)}")
+
+            println("Connected IP:           ${candidate.host}")
+            println("Connected port:         ${candidate.port}")
+
+            println("Selected link:          ${candidate.kind}")
+
+            println("\nAll candidate addresses:")
+
+            peer.candidates.forEach { address ->
+                println(
+                    "IP: ${address.host} | " +
+                            "Port: ${address.port} | " +
+                            "Link: ${address.kind}"
+                )
+            }
+
+            println("\nFingerprint match: ${fingerprint == peer.id}")
+
+            println("===========================================\n")
+
+            // ---------------------------------------------------------
+            // ORIGINAL SECURITY VERIFICATION
+            // ---------------------------------------------------------
+
+            if (fingerprint != peer.id) {
+                throw SecurityException(
+                    "That is not the device it claimed to be"
+                )
+            }
+
+            // ---------------------------------------------------------
+            // ORIGINAL TRANSFER LOGIC
+            // ---------------------------------------------------------
+
+            val io = FrameIO(
+                sock.getInputStream(),
+                sock.getOutputStream()
+            )
+
+            io.writeControl(
+                Hello(
+                    PROTOCOL_VERSION,
+                    config.deviceName,
+                    config.deviceKind
+                )
+            )
+
+            val hello = io.readControl() as? Hello
+                ?: throw ProtocolException("Expected hello")
+
             val code = CheckCode.of(identity.fingerprint, fingerprint)
-            _events.emit(WaitingForAnswer(transferId, hello.name, code))
+
+            _events.emit(
+                WaitingForAnswer(
+                    transferId,
+                    hello.name,
+                    code
+                )
+            )
 
             sock.soTimeout = ANSWER_WAIT_MILLIS
+
             var lastEmit = 0L
             var firstNanos = 0L
             var firstBytes = 0L
+
             val outcome = Sender(io).send(items) { p ->
+
                 val now = System.nanoTime()
+
                 if (firstNanos == 0L) {
-                    // Chunks the other side already had are not "sent", so speed counts from here.
                     firstNanos = now
                     firstBytes = p.doneBytes
                 }
-                if (now - lastEmit > PROGRESS_EVERY_NANOS || p.doneBytes == p.totalBytes) {
+
+                if (
+                    now - lastEmit > PROGRESS_EVERY_NANOS ||
+                    p.doneBytes == p.totalBytes
+                ) {
                     lastEmit = now
+
                     val seconds = (now - firstNanos) / 1e9
-                    val speed = if (seconds > 0.05) (p.doneBytes - firstBytes) / seconds else 0.0
+
+                    val speed = if (seconds > 0.05) {
+                        (p.doneBytes - firstBytes) / seconds
+                    } else {
+                        0.0
+                    }
+
                     _events.tryEmit(
-                        TransferProgress(transferId, Direction.SEND, hello.name, p.name, p.doneBytes, p.totalBytes, speed, candidate.kind),
+                        TransferProgress(
+                            transferId,
+                            Direction.SEND,
+                            hello.name,
+                            p.name,
+                            p.doneBytes,
+                            p.totalBytes,
+                            speed,
+                            candidate.kind
+                        )
                     )
                 }
             }
+
             val result = when (outcome) {
-                is SendOutcome.Done -> SendResult(true, "Sent to ${hello.name}", candidate.kind)
-                is SendOutcome.Rejected -> SendResult(false, outcome.reason, candidate.kind)
+                is SendOutcome.Done ->
+                    SendResult(true, "Sent to ${hello.name}", candidate.kind)
+
+                is SendOutcome.Rejected ->
+                    SendResult(false, outcome.reason, candidate.kind)
             }
-            _events.emit(TransferFinished(transferId, Direction.SEND, hello.name, result.ok, result.message))
+
+            _events.emit(
+                TransferFinished(
+                    transferId,
+                    Direction.SEND,
+                    hello.name,
+                    result.ok,
+                    result.message
+                )
+            )
+
             return result
+
         } finally {
             onCancel.dispose()
             openSockets.remove(sock)
-            runCatching { sock.close() }
+
+            runCatching {
+                sock.close()
+            }
         }
     }
 
